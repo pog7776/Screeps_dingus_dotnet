@@ -1,40 +1,38 @@
-## .NET WASI app
+## Screeps dingus dotnet
 
-## Build
-### Default
+My dotnet Screeps repo
 
-You can build the app from Visual Studio or from the command-line:
+This project is using [ScreepsDotNet](https://github.com/thomasfn/ScreepsDotNet)
 
-```
-dotnet build -c Debug/Release
-```
+> Requires .NET 8
+> ```
+> winget install Microsoft.DotNet.SDK.8
+> ```
 
-After building the app, the result is in the `bin/$(Configuration)/net9.0/wasi-wasm/AppBundle` directory.
+---
 
-### As a single file bundle
+### Building
 
-Add `<WasmSingleFileBundle>true</WasmSingleFileBundle>` to your project file to enable this. It will result in a single `<name_of_the_main_assembly>.wasm` file which contains all the assemblies.
-
-## Run
-
-You can build the app from Visual Studio or the command-line:
+Run `build.ps1`
 
 ```
-dotnet run -c Debug/Release
+.\build.ps1 Debug
+-- or --
+.\build.ps1 Release
 ```
 
-Or directly start `wasmtime` from the AppBundle directory:
+> Note:
+> 
+> `build.ps1` copies files to a hard coded directory.
 
-### default case
-
-```
-cd bin/$(Configuration)/net9.0/wasi-wasm/AppBundle
-wasmtime run --dir .  -- dotnet.wasm <name_of_the_main_assembly>
-```
-
-### for single file bundle
+Essentially runs this:
 
 ```
-cd bin/$(Configuration)/net9.0/wasi-wasm/AppBundle
-wasmtime --dir . -- <name_of_the_main_assembly>.wasm
+dotnet publish -c Debug
+-- or --
+dotnet publish -c Release
 ```
+
+> See: [ScreepsDotNet - Build](https://github.com/thomasfn/ScreepsDotNet?tab=readme-ov-file#building)
+
+---
