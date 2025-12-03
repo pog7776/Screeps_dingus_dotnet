@@ -9,15 +9,17 @@ public abstract class Service : IServiceRunner
     public string Name { get; }
     protected IGame Game { get; }
 
+    protected virtual string LogTag => Name;
+
     protected Service(IGame game, string name)
     {
         Name = name;
         Game = game;
 
-        LogCreation();
+        Log($"Created service: '{Name}'");
     }
 
-    private void LogCreation() => Console.WriteLine($"Created service: '{Name}'");
+    protected void Log(string? value) => Console.WriteLine($"[{LogTag}] {value}");
 
     public abstract void OnTick();
 }
