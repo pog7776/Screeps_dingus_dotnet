@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 
+using dingus_net.ServiceSystem.Resources;
 using dingus_net.ServiceSystem.Rooms;
 
 using ScreepsDotNet.API;
@@ -44,7 +45,7 @@ public class MinerRole : IRole
         switch(currentTask)
         {
             case Task.Harvesting: DoHarvesting(creep, room); break;
-            case Task.Hauling: DoHauling(creep); break;
+            case Task.Hauling: DoHauling(creep, room); break;
             case Task.Idle:
             default:
                 creep.Say("⚠️ Error/Idle");
@@ -122,9 +123,20 @@ public class MinerRole : IRole
         }
     }
 
-    private static void DoHauling(ICreep creep)
+    private static void DoHauling(ICreep creep, RoomService room)
     {
-        IStructure targetStructure = creep.Room.Controller;
+        EnergyManager? energyManager = room.EnergyManager;
+
+        IStructure? targetStructure = room.Controller;
+
+        // TODO cache the target and check if it's full or something?
+        // Finding each tick sucks
+        // Should really make target priority a RoomService responsibility
+        if(energyManager?.EnergyAvailable < energyManager?.EnergyCapacity)
+        {
+            targetStructure = room.Find<IStructureSpawn>()
+                .FirstOrDefault(static spawn => spawn.Store.GetFreeCapacity(ResourceType.Energy) >= 0);
+        }
 
         if(targetStructure == null) { return; }
 

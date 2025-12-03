@@ -22,7 +22,7 @@ public class EnergyManager : Service
     public int EnergyAvailable => Room.EnergyAvailable;
 
     /// <seealso cref="IRoom.EnergyCapacityAvailable"/>
-    public int EnergyCapacityAvailable => Room.EnergyCapacityAvailable;
+    public int EnergyCapacity => Room.EnergyCapacityAvailable;
 
     /// <inheritdoc />
     public EnergyManager(RoomService room, IGame game) : base(game, nameof(EnergyManager))
