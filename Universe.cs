@@ -10,7 +10,7 @@ namespace dingus_net
 {
 public class Universe : Service
 {
-    public IGame Game { get; }
+    public static CpuManager? Cpu { get; private set; }
 
     private readonly ServiceCollection _services = [];
     private readonly ServiceCollection _rooms = [];
@@ -31,6 +31,7 @@ public class Universe : Service
     {
         Log("Creating Universe Services..");
 
+        _services.Add(Cpu ??= new CpuManager(Game));
     }
 
     private void CreateRooms()
