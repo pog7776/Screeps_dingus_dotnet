@@ -13,6 +13,9 @@ public class RoomService : Service
 {
     public IRoom Room { get; }
 
+    /// <inheritdoc />
+    protected override string LogTag => "Room";
+
     private readonly ServiceCollection _services = [];
 
     public EnergyManager? EnergyManager { get; private set; }
@@ -36,7 +39,7 @@ public class RoomService : Service
 
     private void CreateServices()
     {
-        Console.WriteLine($"Creating {Name} Services..");
+        Log($"Creating {Name} Services..");
 
         _services.Add(EnergyManager = new EnergyManager(this, Game));
         _services.Add(Population = new PopulationService(this, Game));
