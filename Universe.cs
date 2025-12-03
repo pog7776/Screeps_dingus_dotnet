@@ -2,43 +2,40 @@ using System;
 
 using dingus_net.ServiceSystem;
 using dingus_net.ServiceSystem.Rooms;
+using dingus_net.ServiceSystem.System;
 
 using ScreepsDotNet.API.World;
 
 namespace dingus_net
 {
-public class Universe : IServiceRunner
+public class Universe : Service
 {
     public IGame Game { get; }
 
+    private readonly ServiceCollection _services = [];
     private readonly ServiceCollection _rooms = [];
-    //private readonly ServiceCollection _services = [];
 
-    public Universe(IGame game)
+    public Universe(IGame game) : base(game, nameof(Universe))
     {
-        Game = game;
         CleanMemory(Game);
 
-        Console.WriteLine("Creating Universe..");
+        Log("Creating Universe..");
 
+        CreateServices();
         CreateRooms();
 
-        //CreateServices();
-
-        Console.WriteLine("Universe created");
+        Log("Universe created");
     }
 
-    // private void CreateServices()
-    // {
-    //     Console.WriteLine("Creating Universe Services..");
-    //
-    //     _services.Add(new PopulationService(Game));
-    //     _services.Add(new CreepConductor(Game));
-    // }
+    private void CreateServices()
+    {
+        Log("Creating Universe Services..");
+
+    }
 
     private void CreateRooms()
     {
-        Console.WriteLine("Creating Universe Rooms..");
+        Log("Creating Universe Rooms..");
 
         foreach(IRoom room in Game.Rooms.Values)
         {
@@ -46,10 +43,11 @@ public class Universe : IServiceRunner
         }
     }
 
-    public void OnTick()
+    /// <inheritdoc/>
+    public override void OnTick()
     {
+        _services.OnTick();
         _rooms.OnTick();
-        //_services.OnTick();
     }
 
     public static void CleanMemory(IGame game)
