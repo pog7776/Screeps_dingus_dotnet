@@ -63,7 +63,7 @@ public class PopulationService : Service
         IStructureSpawn? spawner = GetSpawner(_room.Room);
         if(spawner == null)
         {
-            Console.WriteLine($"Unable to find spawner in room: {_room.Room}");
+            Log($"Unable to find spawner in room: {_room.Room}");
             return SpawnCreepResult.Busy;
         }
 
@@ -73,14 +73,14 @@ public class PopulationService : Service
         SpawnCreepResult testResult = TestSpawn(spawner, body);
         if(testResult != SpawnCreepResult.Ok)
         {
-            Console.WriteLine($"Failed to spawn creep: {testResult}");
+            Log($"Failed to spawn creep: {testResult}");
             return testResult;
         }
 
         IMemoryObject initialMemory = Game.CreateMemoryObject();
         initialMemory.SetValue(RoleRegistry.RoleKey, role.Name);
 
-        Console.WriteLine($"{this}: spawning a {role.Name} ({body}) from {spawner}..");
+        Log($"{this}: spawning a {role.Name} ({body}) from {spawner}..");
 
         return spawner.SpawnCreep(body, name, new SpawnCreepOptions(dryRun: false, memory: initialMemory));
     }
@@ -102,7 +102,7 @@ public class PopulationService : Service
 
     private void OnCreepDied(ICreep creep)
     {
-        Console.WriteLine($"{this}: {creep} died");
+        Log($"{this}: {creep} died");
 
         //Universe.CleanMemory(Game);
         DisposeCreep(creep);
@@ -115,7 +115,7 @@ public class PopulationService : Service
         if (!Game.Memory.TryGetObject("creeps", out IMemoryObject? creepsObj)) { return; }
 
         creepsObj.ClearValue(creep.Name);
-        Console.WriteLine($"Removed {creep.Name} from memory");
+        Log($"Removed {creep.Name} from memory");
 
     }
 }
